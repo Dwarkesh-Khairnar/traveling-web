@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.css.map" rel="stylesheet">
+    <title>Places finder by map</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Travel Website</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/gallery">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link" href="/distance">Distance Calculator</a></li>
+                <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <script>
+        const categories=[
+            "commercial.supermarket",
+            "commercial.clothing",
+            "commercial.food_and_drink",
+            "accommodation.hotel",
+            "entertainment.museum",
+            "enteetainment.water_park",
+            "rental.bicycle"
+        ];
+
+        const categoriesform=document.getElementById('catagoiesform');
+        categories.forEach(category=>{
+            const lable =document.createElement("lable");
+            lable.innerHTML=`<input class="form-control" type="Checkbox" value="${category}">`
+            $(category.split('_').pop().replace('_',' ').toUpperCase());
+            categoriesform.appendChild(lable);
+            categoriesform.appendChild(document.createElement('br'));
+        });
+
+        const apikey="3dfc97b4a1ce4b43bbead926d3e6933b";
+    </script>
+
+    <h1>Finde Places </h1>
+    <p>Select categories and click on the map to set the city on you whant to traval with as</p>
+    <form id="categoriesform">
+        <!-- Check box diynamically add on here -->
+    </form>
+    <button id="fetchPlaces"> Get info</button>
+    
+    <div id="map"></div>
+    <div id="Places"></div>
+</body>
+</html>
