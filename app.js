@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('Public'));
+app.use('/public',express.static('Public'));
 app.use('/node_modules', express.static('node_modules'));
 app.set('view engine','html');
 app.use(cors());
