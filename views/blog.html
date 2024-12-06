@@ -80,8 +80,11 @@
                     blogPosts.innerHTML += blogPost;
                 });
             })
-            .catch(error => console.error("Error fetching blog posts:", error));
-
+                .catch((error) => {
+                    console.error("Error fetching blog posts:", error);
+                    const blogPosts = document.getElementById("blog-posts");
+                    blogPosts.innerHTML = `<div class="alert alert-danger">Error fetching blog posts: ${error.message}</div>`;
+                });
     </script>
 </body>
 
