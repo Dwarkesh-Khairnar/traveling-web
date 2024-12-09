@@ -15,10 +15,6 @@ app.use('/node_modules', express.static('node_modules'));
 app.set('view engine','html');
 app.use(cors());
 
-// server static files from the "public"
-// app.use(express.static(path.join(__dirname,'public')));
-
-
 // Home Page Route
 app.get('/', function(req, res){
     res.sendFile(__dirname+'/views/index.html');
@@ -50,16 +46,15 @@ app.get('/gallery', (req, res) => {
 
 
 // Blog Page Route
-app.get('/blog', (req, res) => {
+app.get('/api/blog', (req, res) => {
     console.log('Fetching data from database');
     const query='SELECT * FROM blog';
     db.query(query,(err, results) => {
         if (err) {
         console.error('Database query error:', err);
         return res.status(500).json({ error: 'Failed to fetch blog posts' });
-                    }
+        }
         console.log('Data fetched successfully',results);
-        
         res.json(results); // Send blog posts to the front-end
 
     });
