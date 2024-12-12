@@ -52,7 +52,7 @@
     <script>
      document.addEventListener("DOMContentLoaded", () => {
         if (window.location.pathname === "/blog") {
-         fetch("/blog")
+         fetch("/api/blog")
             .then(response => {
                 console.log('response:',response);
                 if (!response.ok) {
