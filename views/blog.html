@@ -50,7 +50,9 @@
     </div>
 
     <script>
-        fetch("/blog")
+     document.addEventListener("DOMContentLoaded", () => {
+        if (window.location.pathname === "/blog") {
+         fetch("/blog")
             .then(response => {
                 console.log('response:',response);
                 if (!response.ok) {
@@ -85,6 +87,8 @@
                     const blogPosts = document.getElementById("blog-posts");
                     blogPosts.innerHTML = `<div class="alert alert-danger">Error fetching blog posts: ${error.message}</div>`;
                 });
+        }
+     });
     </script>
 </body>
 
