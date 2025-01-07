@@ -22,30 +22,6 @@
 //         .catch(error => console.error('Error fetching gallery data:', error));
 // }
 
-//     // Distance Calculator: Handle form submission and display distance
-//     // if (window.location.pathname === '/distance') {
-//     //     const form = document.getElementById('distance-form');
-//     //     form.addEventListener('submit', (e) => {
-//     //         e.preventDefault();
-//     //         const origin = document.getElementById('origin').value;
-//     //         const destination = document.getElementById('destination').value;
-
-//     //         fetch('/distance', {
-//     //             method: 'POST',
-//     //             headers: {
-//     //                 'Content-Type': 'application/json',
-//     //             },
-//     //             body: JSON.stringify({ origin, destination }),
-//     //         })
-//     //         .then(response => response.json())
-//     //         .then(data => {
-//     //             const result = document.getElementById('distance-result');
-//     //             result.innerText = `Distance: ${data.distance}`;
-//     //         })
-//     //         .catch(error => console.error('Error calculating distance:', error));
-//     //     });
-// }
-
 // Blog Page: Fetch and display blog posts, and handle new blog post submission
 // if (window.location.pathname === '/blog') {
 //     fetch('/blog')
