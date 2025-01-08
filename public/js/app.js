@@ -1,4 +1,3 @@
-// // Gallery Page: Fetch and display locations from MySQL
 // if (window.location.pathname === '/gallery') {
 //     fetch('/gallery')
 //         .then(response => response.json())
