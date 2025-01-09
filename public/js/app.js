@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", () => {
 // if (window.location.pathname === '/gallery') {
 //     fetch('/gallery')
 //         .then(response => response.json())
@@ -42,7 +43,6 @@
 //             });
 //         })
 //         .catch(error => console.error('Error fetching blog posts:', error));
-document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname === "/blog") {
     fetch("/blog")
       .then((response) => {
