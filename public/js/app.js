@@ -96,7 +96,6 @@ if (window.location.pathname === '/gallery') {
   // //         });
 
   // // app.post('/blog', function(req, res){
-  // //     console.log(req.body);
   // //     var title=req.body.title;
   // //     var content=req.body.content;
   // //     // var { title, content } = req.body;
