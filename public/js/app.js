@@ -103,4 +103,4 @@ if (window.location.pathname === '/gallery') {
   // //         if (err) throw err;
   // //         res.redirect('/blog');
   // //     });
-  // // });
+  // });
