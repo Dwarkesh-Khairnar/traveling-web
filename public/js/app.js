@@ -102,5 +102,5 @@ if (window.location.pathname === '/gallery') {
   // //     db.query('INSERT INTO blog (title, content) VALUES (?, ?)',[title, content],(err) => {
   // //         if (err) throw err;
   // //         res.redirect('/blog');
-  // //     });
+  //   });
   // });
