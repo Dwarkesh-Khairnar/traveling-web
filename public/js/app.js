@@ -82,7 +82,7 @@ if (window.location.pathname === '/gallery') {
 
   // //             fetch('/blog', {
   // //                 method: 'POST',
-  // //                 headers: {
+  //                  headers: {
   //                'Content-Type': 'application/json',
   //                 },
   // //                 body: JSON.stringify({ title, content }),
