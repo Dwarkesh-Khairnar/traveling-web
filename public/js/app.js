@@ -81,7 +81,7 @@ if (window.location.pathname === '/gallery') {
   // //             const content = document.getElementById('content').value;
 
   // //             fetch('/blog', {
-  // //                 method: 'POST',
+  //                 method: 'POST',
   //                  headers: {
   //                'Content-Type': 'application/json',
   //                 },
