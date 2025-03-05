@@ -74,7 +74,7 @@ if (window.location.pathname === '/gallery') {
 //         .catch(error => console.error('Error fetching blog posts:', error));
 
   //         // Handle new blog post submission
-  // //         const form = document.getElementById('blog-form');
+  //      const form = document.getElementById('blog-form');
   // //         form.addEventListener('submit', (e) => {
   // //             e.preventDefault();
   // //             const title = document.getElementById('title').value;
