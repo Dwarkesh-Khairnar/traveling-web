@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 if (window.location.pathname === '/gallery') {
-    fetch('/gallery')
+    fetch('/api/gallery')
         .then(response => response.json())
         .then(data => {
             const gallery = document.getElementById('gallery');
