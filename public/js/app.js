@@ -77,7 +77,7 @@ if (window.location.pathname === '/gallery') {
   //      const form = document.getElementById('blog-form');
   // //         form.addEventListener('submit', (e) => {
   // //             e.preventDefault();
-  // //             const title = document.getElementById('title').value;
+  //             const title = document.getElementById('title').value;
   //            const content = document.getElementById('content').value;
 
   //            fetch('/blog', {
