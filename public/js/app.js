@@ -92,7 +92,7 @@ if (window.location.pathname === '/gallery') {
   // //                     window.location.reload();
   // //                 }
   // //             })
-  // //             .catch(error => console.error('Error adding new blog post:', error));
+  //             .catch(error => console.error('Error adding new blog post:', error));
   // //         });
 
   // // app.post('/blog', function(req, res){
