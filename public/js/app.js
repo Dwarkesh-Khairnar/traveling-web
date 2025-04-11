@@ -87,7 +87,7 @@ if (window.location.pathname === '/gallery') {
   //                 },
   //               body: JSON.stringify({ title, content }),
   //              })
-  // //             .then(response => {
+  //            .then(response => {
   //               if (response.ok) {
   // //                     window.location.reload();
   //                 }
