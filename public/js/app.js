@@ -89,7 +89,7 @@ if (window.location.pathname === '/gallery') {
   //              })
   //            .then(response => {
   //               if (response.ok) {
-  // //                     window.location.reload();
+  //                   window.location.reload();
   //                 }
   //         })
   //             .catch(error => console.error('Error adding new blog post:', error));
