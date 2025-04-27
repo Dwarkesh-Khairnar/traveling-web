@@ -95,7 +95,7 @@ if (window.location.pathname === '/gallery') {
   //             .catch(error => console.error('Error adding new blog post:', error));
   //         });
 
-  // // app.post('/blog', function(req, res){
+  //  app.post('/blog', function(req, res){
   // //     var title=req.body.title;
   // //     var content=req.body.content;
   //    // var { title, content } = req.body;
