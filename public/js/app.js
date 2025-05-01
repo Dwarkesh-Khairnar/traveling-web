@@ -96,7 +96,7 @@ if (window.location.pathname === '/gallery') {
   //         });
 
   //  app.post('/blog', function(req, res){
-  // //     var title=req.body.title;
+  //    var title=req.body.title;
   //     var content=req.body.content;
   //    // var { title, content } = req.body;
   //  db.query('INSERT INTO blog (title, content) VALUES (?, ?)',[title, content],(err) => {
