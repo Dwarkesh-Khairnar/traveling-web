@@ -48,7 +48,7 @@ app.get('/gallery', (req, res) => {
 // Blog Page Route
 app.get('/api/blog', (req, res) => {
     console.log('Fetching data from database');
-    const query='SELECT * FROM blog';
+    const query=`SELECT * FROM blog where topreting='top'`;
     db.query(query,(err, results) => {
         if (err) {
         console.error('Database query error:', err);
