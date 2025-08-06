@@ -21,7 +21,8 @@ if (window.location.pathname === '/gallery') {
         })
         .catch(error => console.error('Error fetching gallery data:', error));
 }
-  if (window.location.pathname === "/blog") {
+
+    if (window.location.pathname === "/blog") {
     fetch("/blog")
       .then((response) => {
         console.log('response:',response);
@@ -104,3 +105,4 @@ if (window.location.pathname === '/gallery') {
   //       res.redirect('/blog');
   //   });
   // });
+
