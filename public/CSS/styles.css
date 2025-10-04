@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* styles.css */
 * {
     font-family: cursive;
@@ -255,3 +256,126 @@ h2 {
 #search:focus {
     outline: none;
 }
+=======
+/* styles.css */
+
+/* Basic Reset */
+body, h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f9fc; /* Light background */
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #87CEEB; /* Light blue */
+}
+
+.nav-link {
+    color: #0051ff !important; /* White text for links */
+}
+
+.nav-link:hover {
+    color: #FFD700 !important; /* Gold on hover */
+}
+
+/* Header Video Styles */
+.video-header {
+    position: relative;
+    overflow: hidden;
+}
+
+#header-video {
+    width: 100%;
+    height: auto;
+    min-height: 400px; /* Set a minimum height for the video */
+    object-fit: cover; /* Ensure the video covers the header */
+}
+
+.header-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    text-align: center;
+    animation: fadeIn 2s ease-in; /* Fade-in animation */
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #87CEEB; /* Light blue */
+    padding: 10px 0;
+    color: #fff; /* White text */
+    position: relative;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 5;
+    }
+}
+
+.container {
+    animation: slideIn 0.5s ease-in-out; /* Slide-in animation for containers */
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.a1:hover{
+    text-shadow:3px 3px 3px #00ddff ;
+}
+
+h1, h2 {
+    color: #00c8ff; /* Darker text for headings */
+}
+
+.btn-primary {
+    background-color: #87CEEB; /* Button color */
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #69B2D8; /* Darker shade on hover */
+}
+
+/* Gallery Images */
+#gallery {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.gallery-item {
+    width: 30%;
+    margin: 1.5%;
+    position: relative;
+}
+
+.gallery-item img {
+    width: 100%;
+    border-radius: 8px;
+    transition: transform 0.3s ease; /* Scale animation on hover */
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05); /* Scale effect on hover */
+}
+
+>>>>>>> c3825673c631771d9ef7e28377b90e23a36082dd

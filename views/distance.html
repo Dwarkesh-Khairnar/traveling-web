@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 
@@ -254,3 +255,92 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distance Calculation with Geoapify</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+
+<body>
+
+  <div id="map" style="width: 100%; height: 500px;"></div>
+  <p>Marker 1: <span id="marker1-coordinates">Not selected</span></p>
+  <p>Marker 2: <span id="marker2-coordinates">Not selected</span></p>
+  <p>Distance: <span id="distance">N/A</span></p>
+
+  <script>
+    const map = L.map('map').setView([20.5937, 78.9629], 5); // Centered in India
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    let marker1, marker2; // For storing the two markers
+    let coords1, coords2; // For storing the coordinates of the two markers
+
+    map.on('click', function (e) {
+      const { lat, lng } = e.latlng;
+
+      if (!marker1) {
+        marker1 = L.marker([lat, lng]).addTo(map).bindPopup("Marker 1").openPopup();
+        coords1 = { lat, lng };
+        document.getElementById("marker1-coordinates").textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+      } else if (!marker2) {
+        marker2 = L.marker([lat, lng]).addTo(map).bindPopup("Marker 2").openPopup();
+        coords2 = { lat, lng };
+        document.getElementById("marker2-coordinates").textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+        // Calculate distance once both markers are placed
+        calculateDistance(coords1, coords2);
+      } else {
+        alert("Markers already set! Reload to reset.");
+      }
+    });
+    async function calculateDistance(coord1, coord2) {
+      const body = {
+        "mode": "drive",
+        "sources": [{ "location": [coord1.lng, coord1.lat] }],
+        "targets": [{ "location": [coord2.lng, coord2.lat] }]
+      };
+
+
+
+      try {
+        await fetch(
+          `https://api.geoapify.com/v1/routematrix?apiKey="Your_Api_key`,// Replace YOUR_API_KEY with the actual Geoapify API key
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+          })
+          .then(res => res.json())
+          .then(data => {
+            // Extracting the distance from the response
+            const distance = data.sources_to_targets[0][0].distance; // Distance in meters
+            const distanceInKm = (distance / 1000).toFixed(2); // Convert meters to kilometers
+
+            // Display the distance in the DOM
+            document.getElementById("distance").innerText = `${distanceInKm} km`;
+            console.log("Extracted Distance (meters):", distance);
+          })
+      }
+
+      catch (error) {
+        console.error("Error:", error);
+        document.getElementById("distance").textContent = "Error calculating distance."
+          ;
+      }
+    }
+
+
+
+  </script>
+</body>
+
+</html>
+>>>>>>> c3825673c631771d9ef7e28377b90e23a36082dd

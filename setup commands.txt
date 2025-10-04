@@ -1,0 +1,19 @@
+**bash**
+
+npm install node.js		
+
+npm install express
+
+npm install mysql2
+
+npm install bodyParser
+
+npm install boostrap
+
+npm install cord
+
+npm app.js				start node app
+
+**In browser**
+
+http://localchost:3600

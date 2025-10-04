@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -350,3 +351,100 @@
 </script>
 
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../public/CSS/styles.css">
+    <title>Travel Blog</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Travel Website</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/gallery">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link" href="/distance">Distance Calculator</a></li>
+                <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Travel Blog</h1>
+        <div class="row">
+            <!-- Blog Posts -->
+            <div id="blog-posts" class="col-md-8">
+                <!-- Blog content will be dynamically added here -->
+            </div>
+
+            <!-- Add New Blog Post -->
+            <div class="col-md-4">
+                <h3>Add New Blog Post</h3>
+                <form id="blog-form" method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" id="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Content</label>
+                        <textarea class="form-control" name="content" id="content" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Blog</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+     document.addEventListener("DOMContentLoaded", () => {
+        if (window.location.pathname === "/blog") {
+         fetch("/api/blog")
+            .then(response => {
+                console.log('response:',response);
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+                console.log(response);
+                     //Expect JSON
+            })
+            .then(posts => {
+                console.log(posts);
+                
+                const blogPosts = document.getElementById("blog-posts");
+                blogPosts.innerHTML = ""; // Clear previous content
+                posts.forEach((post) => {
+                    const blogPost = `
+                    <div class="card mb-3 shadow-sm bg-light">
+                    <div class="card-body">
+                    <h5 class="card-title text-primary">${post.title}</h5>
+                    <p class="card-text">${post.content}</p>
+                    <small class="text-muted">Posted on ${new Date(
+                        post.created_at
+                    ).toLocaleString()}</small>
+                    </div>
+                    </div>
+                    `;
+                    blogPosts.innerHTML += blogPost;
+                });
+            })
+                .catch((error) => {
+                    console.error("Error fetching blog posts:", error);
+                    const blogPosts = document.getElementById("blog-posts");
+                    blogPosts.innerHTML = `<div class="alert alert-danger">Error fetching blog posts: ${error.message}</div>`;
+                });
+        }
+     });
+    </script>
+</body>
+
+</html>
+>>>>>>> c3825673c631771d9ef7e28377b90e23a36082dd
