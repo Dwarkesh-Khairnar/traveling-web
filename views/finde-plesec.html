@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Places by Clicking on the Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      margin: 10px;
+    }
+
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+
+    .place {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-check {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="mb-3">Find Places on the Map</h1>
+    <p>Select categories, search a location, or click the map to find nearby places.</p>
+
+    <!-- Search -->
+    <div class="input-group mb-3">
+      <input type="search" list="suggestions" class="form-control" id="search" placeholder="Search location..." />
+      <datalist id="suggestions"></datalist>
+      <!-- <button class="btn btn-primary" id="fetchPlaces">Fetch Places</button> -->
+    </div>
+
+    <!-- Category Switches -->
+    <div class="row" id="categorySwitches">
+      <!-- Dynamically generated -->
+    </div>
+    <hr>
+
+    <!-- Category Details -->
+    <div class="container">
+      <form id="categoriesForm" class="row"></form>
+    </div>
+    <hr>
+    <button class="btn btn-primary mb-4" id="fetchPlaces">Fetch Places</button>
+
+    <!-- Map -->
+    <div id="map" class="mb-5"></div>
+
+    <!-- Places -->
+    <div id="places"></div>
+  </div>
+
+
+  <!-- Toast Container -->
+  <div class="toast-container position-fixed bottom-0 start-0 p-3">
+    <div id="welcomeToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto" id="heding">Login</strong>
+        <small>Now</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body" id="toastMessage">
+      </div>
+    </div>
+  </div>
+
+  <div class="toast align-items-center text-white bg-dengar border-0" role="alert" aria-live="assertive"
+    aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Helper function to show toast
+    function showWelcomeToast(message, hedingsmg, color) {
+      const toastMessageEl = document.getElementById("toastMessage");
+      toastElement = document.getElementById("welcomeToast");
+      let heding = document.getElementById('heding')
+
+      if (toastMessageEl && toastElement) {
+        toastMessageEl.textContent = message;
+        heding.textContent = hedingsmg;
+        toastElement.classList.remove('bg-success-subtle');
+        toastElement.classList.add(color);
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+      } else {
+        console.warn("Toast elements not found in DOM.");
+      }
+    }
+
+    let toastElement;
+    let lat1, lng1,city;
+    let selectedMarker;
+    let search2;
+
+    const apiKey = "3dfc97b4a1ce4b43bbead926d3e6933b";
+    let mymap = L.map("map").setView([20.5937, 78.9629], 5);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+    }).addTo(mymap);
+
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.location.pathname === "/find") {
+          fetch("/api/find")
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              lat1 = data.lat
+              lng1 = data.lng
+              city=data.cityname;
+              console.log(lat1, lng1,city);
+              mymap.setView([lat1, lng1], 11);
+              setMarker(lat1, lng1,city)
+            })
+        }
+      });
+
+    // Category definitions
+    const categoryGroups = {
+      "Shopping & Retail": ["commercial.supermarket", "commercial.marketplace", "commercial.shopping_mall", "commercial.department_store", "commercial.elektronics", "commercial.outdoor_and_sport", "commercial.vehicle", "commercial.hobby", "commercial.books", "commercial.gift_and_souvenir", "commercial.stationery", "commercial.newsagent", "commercial.tickets_and_lottery", "commercial.clothing", "commercial.bag", "commercial.baby_goods", "commercial.garden", "commercial.florist", "commercial.chemist", "commercial.gas"],
+      "Dining & Food": ["catering.restaurant", "catering.fast_food", "catering.cafe", "catering.food_court", "catering.bar", "catering.pub", "catering.ice_cream", "catering.biergarten", "catering.taproom"],
+      "Stays": ["accommodation", "accommodation.hotel", "accommodation.apartment", "accommodation.guest_house", "accommodation.hostel"],
+      "Attractions": ["entertainment.zoo", "entertainment.culture", "entertainment.aquarium", "entertainment.planetarium", "entertainment.museum", "entertainment.cinema", "entertainment.amusement_arcade", "entertainment.escape_game", "entertainment.miniature_golf", "entertainment.bowling_alley", "entertainment.theme_park", "entertainment.water_park"],
+      "Medical": ["healthcare", "healthcare.clinic_or_praxis", "healthcare.dentist", "healthcare.hospital", "healthcare.pharmacy"],
+      "Parks": ["leisure", "leisure.picnic", "leisure.playground", "leisure.spa", "leisure.park"],
+      "Parking": ["parking.cars", "parking.surface", "parking.multistorey", "parking.underground", "parking.rooftop", "parking.motorcycle", "parking.bicycles"],
+      "Natural Landscapes": ["natural", "natural.forest", "natural.water", "natural.mountain", "natural.sand", "natural.protected_area"],
+      "Rental Vehicles": ["rental", "rental.car", "rental.bicycle", "rental.boat", "rental.ski"],
+      "Rail Transportation": ["railway", "railway.train", "railway.subway", "railway.surface", "railway.underground"],
+      "Public Transport": ["public_transport", "public_transport.bus", "public_transport.ferry", "public_transport.train", "public_transport.subway", "public_transport.aerialway"],
+      "Sports & Fitness": ["sport", "sport.stadium", "sport.stadium", "sport.ice_rink", "sport.dive_centre", "sport.pitch", "sport.swimming_pool", "sport.track"]
+    };
+
+    const categoriesForm = document.getElementById("categoriesForm");
+    const categorySwitches = document.getElementById("categorySwitches");
+
+    const allSelectedCategories = new Set();
+
+    function renderSwitches() {
+      Object.keys(categoryGroups).forEach((label, index) => {
+        const col = document.createElement("div");
+        col.className = "col-md-3";
+        col.innerHTML = `
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="switch${index}">
+            <label class="form-check-label" for="switch${index}">${label}</label>
+          </div>`;
+        categorySwitches.appendChild(col);
+
+        document.getElementById(`switch${index}`).addEventListener("change", (e) => {
+          console.log(e);
+
+          updateCategoryCheckboxes(label, e.target.checked);
+        });
+      });
+    }
+
+    function updateCategoryCheckboxes(groupLabel, isChecked) {
+      const group = categoryGroups[groupLabel];
+
+      if (isChecked) {
+        group.forEach(cat => allSelectedCategories.add(cat));
+      } else {
+        group.forEach(cat => allSelectedCategories.delete(cat));
+      }
+
+      renderCategoryCheckboxes();
+    }
+
+    function renderCategoryCheckboxes() {
+      categoriesForm.innerHTML = "";
+      Array.from(allSelectedCategories).forEach(cat => {
+        const checkbox = document.createElement("label");
+        checkbox.className = 'col-md-3'
+        checkbox.innerHTML = `
+          <input type="checkbox" value="${cat}">${cat.split(".").pop().replace(/_/g, " ").toUpperCase()}
+          `;
+        categoriesForm.appendChild(checkbox);
+      });
+    }
+
+    renderSwitches();
+
+    // Search handling
+    const inputSearch = document.getElementById("search");
+    const datalist = document.getElementById("suggestions");
+    let searchTimeout, searchResults;
+
+    inputSearch.addEventListener("input", (e) => {
+      clearTimeout(searchTimeout);
+
+      searchTimeout = setTimeout(() => {
+        const searchText = e.target.value;    
+        console.log('file value: ',searchText);
+            
+        fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&lang=en&limit=7&format=json&apiKey=${apiKey}`)
+          .then(res => res.json())
+          .then(data => {
+            console.log('City Data:',data);
+            
+            searchResults = data.results;
+            datalist.innerHTML = "";
+            data.results.forEach(r => {
+              const opt = document.createElement("option");
+              opt.value = r.formatted;
+              datalist.appendChild(opt);
+            });
+          });
+      }, 600);
+    });
+
+    let val
+    inputSearch.addEventListener("change", (r) => {
+      val = inputSearch.value;
+      const match = searchResults.find(r => r.formatted === val);
+
+      if (match) {
+        lat1 = match.lat;
+        lng1 = match.lon;
+        mymap.setView([lat1, lng1], 13);
+        setMarker(lat1, lng1,val);
+      }
+    });
+
+    // Map.click
+    // mymap.on("click", (e) => {
+    //   console.log(e);
+
+    //   lat1 = e.latlng.lat;
+    //   lng1 = e.latlng.lng;
+    //   setMarker(lat1, lng1);
+    // });
+
+    function setMarker(lat, lng ,city) {
+      if (selectedMarker) mymap.removeLayer(selectedMarker);
+      selectedMarker = L.marker([lat, lng]).addTo(mymap);
+      selectedMarker.bindPopup(city).openPopup();
+
+    }
+
+    // Fetch places
+    document.getElementById("fetchPlaces").addEventListener("click", () => {
+      const selected = Array.from(document.querySelectorAll("#categoriesForm input:checked")).map(i => i.value);
+      // if (!lat1 || !lng1) return alert("Please select a location on map or search.");
+
+      if (selected.length === 0) {
+        showWelcomeToast('Select at least one category', 'Alert', 'bg-warning')
+        return;
+      }
+
+      const categoriesQuery = selected.join(",");
+      const url = `https://api.geoapify.com/v2/places?categories=${categoriesQuery}&filter=circle:${lng1},${lat1},5000&lang=en&limit=20&apiKey=${apiKey}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const placesDiv = document.getElementById("places");
+          placesDiv.innerHTML = "";
+
+          // Remove old markers
+          mymap.eachLayer(layer => {
+            if (layer instanceof L.Marker && layer !== selectedMarker) mymap.removeLayer(layer);
+          });
+
+          if (data.features.length === 0) {
+            placesDiv.innerHTML = "<p>No places found.</p>";
+            showWelcomeToast('Places not found ont this city/tawn', 'Error', 'bg-danger')
+            return;
+          }
+
+          data.features.forEach(place => {
+            const props = place.properties;
+            const div = document.createElement("div");
+            div.className = "place";
+            div.innerHTML = `
+              <h5>${props.name || "Unnamed Place"}</h5>
+              <p><strong>Category:</strong> ${props.categories?.join(", ")}</p>
+              <p><strong>Address:</strong> ${props.address_line1 || "N/A"}</p>
+              <p><strong>City:</strong> ${props.city || "N/A"}, ${props.country || "N/A"}</p>
+            `;
+            placesDiv.appendChild(div);
+
+            const [lon, lat] = place.geometry.coordinates;
+            L.marker([lat, lon])
+              .addTo(mymap)
+              .bindPopup(`<strong>${props.name || "Unnamed"}</strong><br>${props.address_line2 || ""}`);
+          });
+
+          mymap.setView([lat1, lng1], 13);
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById("places").innerHTML = "<p>Error fetching places.</p>";
+          showWelcomeToast('Check internet connection or Error fetching places', 'Error', 'bg-danger')
+        });
+    });
+  </script>
+</body>
+
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>two</title>
+</head>
+
+<body>
+    <p id="p"></p>
+</body>
+<script>
+    let p = document.getElementById('p')
+
+    document.addEventListener("DOMContentLoaded", () => {
+        if (window.location.pathname === "/two") {
+            fetch("/api/two")
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    p.textContent = data.lat+','+data.lon;
+                })
+        }
+    });
+
+</script>
+
+</html> -->

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Travel Blog</title>
+  <style>
+    .form-control {
+      border-color: rgba(63, 61, 61, 0.468);
+
+    }
+
+    .card-body p {
+      margin-bottom: 0.25rem;
+    }
+
+    .card-body a {
+      display: block;
+    }
+
+    .card-body img {
+      flex-shrink: 0;
+    }
+
+    .card {
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand" href="/">Travel Website</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="/gallery">Gallery</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/distance">Distance Calculator</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
+      </ul>
+    </div>
+  </nav> -->
+
+  <div class="container mt-5">
+    <h1>Travel Blog</h1>
+
+    <div id="find-data" class="row">
+      <form id="search-form" method="get">
+        <div class="mb-2 col-md-8">
+          <label for="title" class="form-label mt-2">Finde blog by city</label>
+          <input type="text" id="city" class="form-control" id="city" required />
+        </div>
+        <button type="click" id="find-data-click" class="btn btn-primary col-md-2 mt-2">Find Blog</button>
+      </form>
+    </div>
+
+    <div class="row">
+      <!-- Blog Posts -->
+      <div id="blog-posts" class="col-md-8">
+        <!-- Blog content will be dynamically added here -->
+      </div>
+
+      <!-- Add New Blog Post -->
+      <section class="col-md-4 my-5" id="add-blogs">
+        <h3 class="mb-3">Add New Blog Post</h3>
+        <form id="blog-form" method="post" action="/blog">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" id="title" required />
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Content</label>
+            <textarea class="form-control" name="content" id="content" rows="5" required></textarea>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" name="disable" id="disable" disabled />
+            <input type="hidden" class="form-control" name="disable_mail" id="disable_mail" />
+          </div>
+          <div id="logdiv"></div>
+          <p style="margin-bottom: 1vh;"></p>
+
+          <!-- ------------------------------------------ -->
+
+          <button type="submit" class="btn btn-primary">Add Blog</button>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <!-- Button trigger modal -->
+  <!-- <button type="button" class="btn btn-primary btn-lg position-fixed rounded-circle" style="right:25px; bottom: 25px;" data-bs-toggle="modal" data-bs-target="#modelId" id="modeldisplay"> -->
+  <button type="button" class="btn btn-primary btn-lg position-fixed rounded-circle" style="right:25px; bottom: 25px;"
+    id="modeldisplay">
+    <svg viewBox="0 0 449 572" width="20" height="27" fill="currentColor">
+      <path
+        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
+    </svg></button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modelId" tabindex="-1" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="modelTitleId">Modal title</h5>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+
+        <div class="modal-body">
+          <div class="container-fluid">
+            If you have write new blog so your login is whas needed
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue reding</button>
+          <a class="btn btn-primary" href="/" id="add-blogs">Goto Login</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <a href="#add-blogs" id="gotobutton">
+    <a data-bs-toggle="modal" data-bs-target="#modelId" id="modelshow">
+
+
+      <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+</body>
+
+<!-- <button type="button" style="position: absolute; right: 20px; background: #185dccd2; height: 35px; width: 35px; border-radius: 100%; border-color: transparent; color: cornsilk;" class="" id="Loadblog">+</button> -->
+<script>
+
+
+  const mail1 = localStorage.getItem("mail");
+  const aa = '<a href="/login" style="margin-bottom: 2vh;">Login</a>'
+
+  if (!mail1) {
+    document.getElementById('logdiv').innerHTML = aa;
+    localStorage.clear();
+  }
+  document.getElementById('disable_mail').value = mail1 || 'Plecse Relogin for User conformation';
+  document.getElementById('disable').value = mail1 || 'Plecse Relogin for User conformation';
+</script>
+
+<script>
+  // =========================================================================
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.location.pathname === "/blog") {
+      fetch("/api/blog")
+        .then((response) => response.json())
+        .then((posts) => {
+
+          const blogPosts = document.getElementById("blog-posts");
+          posts.forEach((post) => {
+            const blogPost = `
+            <div class="card border-primary mt-3 px-3">
+      <!-- Header -->
+      <div class="card-body d-flex align-items-start p-2">
+        <!--<img src="./logo192.png" alt="Logo" class="me-2" style="width: 30px; height: 30px;" /> -->
+        <div class="flex-grow-1">
+          <p class="mb-1 text-primary" style="font-size: 0.9rem;"><i>${post?.title}</i></p>
+          <a class="form-text" style="font-size: 0.8rem;" href="#">${'@'+post?.mail?.split(/[0-9@]/)[0] }</a>
+        </div>
+      </div>
+      
+      <!-- Divider -->
+      <hr class="my-1" />
+
+      <!-- Content -->
+      <div class="px-2 mb-2" style="max-height: 60px; overflow-y: auto;">
+        <p class="m-0" style="font-size: 0.85rem;">${post?.content}</p>
+      </div>
+      
+      <!-- Footer -->
+      <div class="d-flex justify-content-between align-items-center px-2 py-1">
+        <!-- Like Button 
+        <div class="d-flex align-items-center" style="cursor: pointer;">
+          <svg fill="#00ffff" viewBox="0 0 512 512" style="width: 20px; height: 20px;">
+            <path
+              d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9z">
+              </path>
+              </svg>
+          <p class="ms-2 mb-0" style="font-size: smaller;">0</p>
+        </div>
+        
+        <!-- Comment Button 
+        <div class="d-flex align-items-center" style="cursor: pointer;">
+          <svg fill="#00ffff" viewBox="0 0 512 512" style="width: 20px; height: 20px;">
+            <path
+              d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7z">
+              </path>
+          </svg>
+          <p class="ms-2 mb-0" style="font-size: smaller;">0</p>
+        </div>
+-->
+        <!-- Date -->
+        <small class="text-muted">
+          ${new Date(post.post_date).toLocaleString()}
+        </small>
+        </div>
+      </div>
+            `;
+          blogPosts.innerHTML += blogPost;
+          });
+        })
+        .catch((error) => {
+          // console.error("Error fetching blog posts:", error);
+          const blogPosts = document.getElementById("blog-posts");
+          blogPosts.innerHTML = `<div class="alert alert-danger">Error fetching blog posts : ${error.message}</div>`;
+        });
+      }
+    });
+    
+    const blogPosts = document.getElementById("blog-posts");
+    // Link buttons and comment buttons code
+    // document.getElementById('like-btn').addEventListener('click', () => {
+      //   const counter = document.getElementById('clickvalue');
+      //   counter.textContent = parseInt(counter.textContent) + 1;
+      //   document.getElementById('like-btn').style.pointerEvents = 'none';
+      // });
+      
+  // document.getElementById('comment-btn').addEventListener('click', () => {
+  //   const comment = document.getElementById('commentnum');
+  //   comment.textContent = parseInt(comment.textContent) + 1;
+  //   document.getElementById('comment-btn').style.pointerEvents = 'none';
+  // });
+
+  // searching code
+
+  document.getElementById('search-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const city = document.getElementById('city').value;
+
+    const response1 = await fetch("find-blogs", {
+      method: 'post',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ city }),
+    });
+
+
+    const data = await response1.json()
+    // console.log(data.message);
+    console.log(data);
+
+    if (data.length >= 1) {
+       blogPosts.innerHTML = `<div class="mt-3 alert alert-danger">Error fetching blog posts: ${data.message}</div>`;
+     
+    }
+      try {
+        const blogPosts = document.getElementById("blog-posts");
+        blogPosts.innerHTML = null;
+        
+        data.forEach((post) => {
+          const blogPost = `
+            <div class="card border-primary mt-3 px-3">
+      <!-- Header -->
+      <div class="card-body d-flex align-items-start p-2">
+        <!--<img src="./logo192.png" alt="Logo" class="me-2" style="width: 30px; height: 30px;" /> -->
+        <div class="flex-grow-1">
+          <p class="mb-1 text-primary" style="font-size: 0.9rem;"><i>${post?.title}</i></p>
+          <a class="form-text" style="font-size: 0.8rem;" href="#">${'@'+post?.mail?.split(/[0-9@]/)[0] }</a>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr class="my-1" />
+
+      <!-- Content -->
+      <div class="px-2 mb-2" style="max-height: 60px; overflow-y: auto;">
+        <p class="m-0" style="font-size: 0.85rem;">${post?.content}</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="d-flex justify-content-between align-items-center px-2 py-1">
+        <!-- Like Button 
+        <div class="d-flex align-items-center" style="cursor: pointer;">
+          <svg fill="#00ffff" viewBox="0 0 512 512" style="width: 20px; height: 20px;">
+            <path
+              d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9z">
+            </path>
+          </svg>
+          <p class="ms-2 mb-0" style="font-size: smaller;">0</p>
+        </div>
+
+        <!-- Comment Button 
+        <div class="d-flex align-items-center" style="cursor: pointer;">
+          <svg fill="#00ffff" viewBox="0 0 512 512" style="width: 20px; height: 20px;">
+            <path
+              d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7z">
+            </path>
+          </svg>
+          <p class="ms-2 mb-0" style="font-size: smaller;">0</p>
+        </div>
+-->
+        <!-- Date -->
+        <small class="text-muted">
+          ${new Date(post.post_date).toLocaleString()}
+        </small>
+        </div>
+      </div>
+            `;
+          blogPosts.innerHTML += blogPost;
+        });
+      }
+      catch (error) {
+        // console.error("Error fetching blog posts:", error);
+        const blogPosts = document.getElementById("blog-posts");
+        blogPosts.innerHTML = `<div class="mt-3 alert alert-danger">Error fetching blog posts: ${data.message}</div>`;
+      }
+  });
+
+  document.getElementById('modeldisplay').addEventListener('click', async (event) => {
+    event.preventDefault();
+    let addbutton = document.getElementById('gotobutton')
+    let modelbuttoon = document.getElementById('modelshow')
+
+    function goto() {
+      addbutton.click()
+    }
+    function showmodel() {
+      modelbuttoon.click()
+    }
+
+    const response2 = await fetch("showmodel", {
+      method: 'get',
+      headers: { 'content-type': 'application/json' },
+    });
+
+    const data = await response2.json()
+
+    if (data.excute == 'goto()') {
+      goto();
+    } else {
+      showmodel();
+    }
+
+
+  });
+
+</script>
+
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+
+    <title>Sing-in</title>
+    <style>
+        .form-control {
+            border-color: rgba(63, 61, 61, 0.468);
+        }
+
+        .progress {
+            width: 0;
+            height: 7px;
+            margin-top: 10px;
+            border-radius: 3px;
+        }
+
+        .progressdiv {
+            height: 7px;
+            margin-top: 10px;
+            background-color: rgb(209, 207, 207);
+            border-radius: 5px;
+        }
+
+        #p {
+            height: 10px;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class=" d-flex justify-content-center align-items-center">
+    <form method="post" id="singin-form" class="vw-100 m-5" style="max-width: 400px;">
+        <div class="text-left card border-primary p-4">
+            <!-- <div class="text-left p-4 fit-content"> -->
+            <h3 class="text-center mb-4"><i>Sing-in</i></h3>
+
+            <hr class="card border-primary">
+
+            <div class="form-group align-items-left">
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sirnar">Sirname:</label>
+                <input type="text" name="sirname" id="sirname" class="form-control " required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contact">Contact:</label>
+                <input type="number" name="contact" id="contact" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label class=" d-flex justify-content-between" for="question">Security Question: <a
+                        data-bs-toggle="tooltip"
+                        title="User only set one question,remember and dont forgot,which one is select">&#x24d8</a></label>
+                <select class="form-control" name="question" id="question">
+                    <option>what is your grandfather name?</option>
+                    <option>what is your dream travel destination?</option>
+                    <option>What is your village name?</option>
+                    <option>what is your first solo trip city?</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="">Ansewer:</label>
+                <input type="text" class="form-control" name="ansewer" id="ansewer" aria-describedby="helpId"
+                    placeholder="">
+
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" id="fist-password" required>
+                <div class="progressdiv">
+                    <div class="progress" id="progressbar"></div>
+                </div>
+                <small id="p"></small>
+            </div>
+
+            <div class="form-group mt-2">
+                <label for="confirm">Confirm Password</label>
+                <input type="password" class="form-control" name="confirm" id="confirm-password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3 ">Submit</button>
+
+            <div class="text-center mt-3">
+                <p>Alredy account to <a href="/">Login</a></p>
+            </div>
+        </div>
+    </form>
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 start-0 p-3">
+        <div id="welcomeToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="heding">Login</strong>
+                <small>Now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+            </div>
+        </div>
+    </div>
+
+    <div class="toast align-items-center text-white bg-dengar border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+
+    <!-- <script src="/public/js/submit.js"></script> -->
+    <script>
+        let pass = document.getElementById('fist-password');
+        let progressbar = document.getElementById('progressbar')
+        let progressdiv = document.getElementById('progressdiv')
+        let strenghtword = document.getElementById('p')
+        let numm;
+        let length1, number, symbol, upper, lower;
+        function progressfun(num) {
+            let width = (num / 5) * 100;
+            progressbar.style.width = `${width}%`;
+        }
+
+        pass.addEventListener('input', async (e) => {
+
+            let num = 0;
+
+            let passvalue = pass.value
+            // console.log(fist_pass.value)
+            length1 = passvalue.length >= 8;
+            number = /[0-9]/.test(passvalue)
+            symbol = /[\W_]/.test(passvalue)
+            upper = /[A-Z]/.test(passvalue)
+            lower = /[a-z]/.test(passvalue)
+            // console.log('Lenght:', length1, 'number:', number, 'symbol:', symbol, 'upper:', upper, 'lower:', lower);
+            if (upper) { num++; }
+            if (number) { num++; }
+            if (symbol) { num++; }
+            if (lower) { num++; }
+            if (length1) { num++; }
+
+            console.log(num);
+            if (num == 0) {
+                progressfun(num);
+                progressbar.style.background = null;
+                strenghtword.textContent = null;
+                numm = num
+                console.log(numm);
+
+            } else if (num == 1) {
+                progressfun(num);
+                progressbar.style.background = '#ff0000'
+                strenghtword.textContent = 'Weak';
+                strenghtword.style.color = '#ff0000'
+                numm = num
+                console.log(numm);
+
+            } else if (num == 2) {
+                progressfun(num);
+                progressbar.style.background = '#ff7f00'
+                strenghtword.textContent = 'Middle';
+                strenghtword.style.color = '#ff7f00'
+                numm = num
+                console.log(numm);
+
+            } else if (num == 3) {
+                progressfun(num);
+                progressbar.style.background = '#fff000'
+                strenghtword.textContent = 'Middle';
+                strenghtword.style.color = '#fff000'
+                numm = num
+            } else if (num == 4) {
+                progressfun(num);
+                progressbar.style.background = '#7fff00'
+                strenghtword.textContent = 'Strong';
+                strenghtword.style.color = '#7fff00'
+                numm = num
+            } else if (num == 5) {
+                progressfun(num);
+                progressbar.style.background = '#00ff00'
+                strenghtword.textContent = 'Strong';
+                strenghtword.style.color = '#00ff00'
+                numm = num
+            }
+
+        })
+
+        document.getElementById("singin-form").addEventListener("submit", async (event) => {
+            console.log(numm);
+
+            if (numm == 4 || numm == 5) {
+
+                event.preventDefault();
+                const name = document.getElementById("name").value;
+                const sirname = document.getElementById("sirname").value;
+                const fist_pass = pass.value;
+                const mailid = document.getElementById("email").value;
+                const contact = document.getElementById("contact").value;
+                const question = document.getElementById("question").value;
+                const ansewer = document.getElementById("ansewer").value;
+                const confirm = document.getElementById("confirm-password").value;
+
+                const response = await fetch("/sing", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, sirname, mailid, contact, question, ansewer, fist_pass, confirm }),
+                });
+
+
+                const data = await response.json();
+                console.log('Response', data);
+
+
+                if (!response.ok) {
+                    alert(data.message); // Show error message
+                } else {
+                    if (fist_pass == confirm) {
+                        console.log('true');
+
+                        alert(data.message)
+                        window.location.href = data.redirectto; // Redirect after login
+                    } else {
+                        console.log('false');
+                        alert(data.message)
+                    }
+                }
+            } else {
+                showWelcomeToast('Password is not strong', 'Error', 'bg-danger')
+            }
+        });
+
+        // Helper function to show toast
+        function showWelcomeToast(message, hedingsmg, color) {
+            const toastMessageEl = document.getElementById("toastMessage");
+            toastElement = document.getElementById("welcomeToast");
+            let heding = document.getElementById('heding')
+
+            if (toastMessageEl && toastElement) {
+                toastMessageEl.textContent = message;
+                heding.textContent = hedingsmg;
+                toastElement.classList.remove('bg-success-subtle');
+                toastElement.classList.add(color);
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            } else {
+                console.warn("Toast elements not found in DOM.");
+            }
+        }
+    </script>
+</body>
+
+</html>

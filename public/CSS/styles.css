@@ -1,0 +1,257 @@
+/* styles.css */
+* {
+    font-family: cursive;
+}
+
+html {
+    scrollbar-width: none;
+}
+
+/* Basic Reset */
+body,
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f9fc;
+    /* Light background */
+}
+
+/* Navbar Styles */
+.navbar {
+    /* background-color: #8dd8f6; Light blue */
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(3.3px);
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+}
+
+#nav-link,
+.nav-link-nav{
+    color: #00435f !important;
+    /* White text for links */
+    font-size: large;
+    font-family: Cambria, Cochin, Georgia, Times, serif;
+    cursor: pointer;
+}
+#full-links {
+    color: #00435f !important;
+    /* White text for links */
+    font-size: large;
+    font-family: Cambria, Cochin, Georgia, Times, serif;
+    cursor: pointer;
+}
+
+
+#full-links:hover {
+    color: #e9e9e9 !important;
+    /* Gold on hover */
+}
+#nav-link:hover {
+    color: #e9e9e9 !important;
+    /* Gold on hover */
+}
+#nav-account:hover {
+    color: #e9e9e9 !important;
+    /* Gold on hover */
+}
+
+#li-full-links {
+    cursor: pointer;
+}
+
+/* Header Video Styles */
+.video-header {
+    position: relative;
+    overflow: hidden;
+}
+
+#header-video {
+    width: 100%;
+    height: auto;
+    min-height: 400px;
+    /* Set a minimum height for the video */
+    object-fit: cover;
+    /* Ensure the video covers the header */
+}
+
+.header-content {
+    position: absolute;
+    top: 56%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    text-align: center;
+    animation: fadeIn 2s ease-in;
+    /* Fade-in animation */
+}
+
+.offcanvas {
+    background: rgba(96, 224, 247, 0.489);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #87CEEB;
+    /* Light blue */
+    padding: 10px 0;
+    color: #fff;
+    /* White text */
+    position: relative;
+}
+
+.footer #icons {
+    height: 2vh;
+}
+
+#icons svg {
+    margin-left: 7px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 5;
+    }
+}
+
+.container {
+    animation: slideIn 0.5s ease-in-out;
+    /* Slide-in animation for containers */
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.a1:hover {
+    text-shadow: 3px 3px 3px #00ddff;
+}
+
+h1,
+h2 {
+    color: #00c8ff;
+    /* Darker text for headings */
+}
+
+.btn-primary {
+    background-color: #87CEEB;
+    /* Button color */
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #69B2D8;
+    /* Darker shade on hover */
+}
+
+/* Gallery Images */
+#gallery {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.gallery-item {
+    width: 30%;
+    margin: 1.5%;
+    position: relative;
+}
+
+.gallery-item img {
+    width: 100%;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    /* Scale animation on hover */
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+    /* Scale effect on hover */
+}
+
+.form-control {
+    border-color: rgba(63, 61, 61, 0.468);
+    border-radius: 20px;
+}
+
+.load {
+    height: 1rem;
+    width: 1rem;
+    border: 5px #000 solid;
+    border-radius: 20px;
+    border-bottom-color: #ffffff;
+    border-top-color: #ffffff;
+    animation: spin 1s infinite linear;
+    top: 0.7rem;
+}
+
+.hidde {
+    display: none;
+}
+
+@keyframes spin {
+    25% {
+        transform: rotate(60deg);
+    }
+
+    50% {
+        transform: rotate(360deg);
+    }
+
+    75% {
+        transform: rotate(90deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.fit {
+    display: flex;
+    justify-content: right;
+}
+
+.button {
+    border-radius: 20px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border: 1px solid #000;
+    border-left: none;
+    height: auto;
+}
+
+#search {
+    height: auto;
+    border: 1px solid #000;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    background: #f6f4f4;
+}
+
+#search:focus {
+    outline: none;
+}

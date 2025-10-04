@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Login Form</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <style>
+    .form-control{
+      border-color: rgba(63, 61, 61, 0.468);
+    }</style>
+</head>
+
+<body id="loginpage">
+
+  <div class=" d-flex justify-content-end m-3">
+    <a href="/Demo-home">Skip</a>
+  </div>
+
+  <div class="bg-light d-flex justify-content-center align-items-center vh-100">
+    <div>
+      <form method="post" id="loginform" style="width: 100%; max-width: 350px">
+        <div class="card border-primary p-5 larger shadow">
+
+          <h3 class="text-center mb-3">Login</h3>
+
+          <div class="form-group">
+            <label for="username">Mail:</label>
+            <input type="text" class="form-control mb-3 larger shadow" name="email" id="email" placeholder="" />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control mb-3 larger shadow" name="password" id="password"
+              autocomplete="current-password" />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Login</button>
+
+          <div class="text-center mt-3">
+            <p class="small">
+              Don't have an account?
+              <a href="sing">Sing-Up</a>
+            </p>
+            <p>
+              <a class="small" href="forgot">Forgot Password?</a>
+            </p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="welcomeToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Login</strong>
+                <small>Now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+            <h1>HIIII</h1>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/public/js/submit.js"></script>
+
+<script>
+  window.addEventListener('beforeunload',()=>{
+    localStorage.clear();
+  })
+</script>
+
+</html>

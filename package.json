@@ -1,0 +1,37 @@
+{
+  "name": "collage-project",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "bootstrap": "^5.3.7",
+    "chart": "^0.1.2",
+    "chart.js": "^4.5.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "gsap": "^3.13.0",
+    "jquey": "^0.0.1-security",
+    "mysql2": "^3.14.0",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^7.0.3",
+    "nodemon": "^3.1.7",
+    "path": "^0.12.7",
+    "postmark": "^4.0.5",
+    "session": "^0.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  }
+}

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forget pass section</title>
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+  <style>
+    span {
+      color: red;
+    }
+
+    .form-group {
+      text-align: start;
+    }
+
+    .form-control {
+      border-color: rgba(63, 61, 61, 0.468);
+    }
+
+    .progress {
+      width: 0;
+      height: 7px;
+      margin-top: 10px;
+      border-radius: 3px;
+    }
+
+    .progressdiv {
+      height: 7px;
+      margin-top: 10px;
+      background-color: rgb(209, 207, 207);
+      border-radius: 5px;
+    }
+
+    #p {
+      height: 10px;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body class="align-items-center justify-content-center vh-100 d-flex">
+
+  <div class="align-items-center m-5 card border-primary p-5 larger shadow pb-3" style="width: 100%; max-width: 350px">
+    <form action="" id="forgot-form" style="width: 100%; max-width: 300px">
+
+      <h3 class="form-label mb-4 mt-3 text-center">Forgot password</h3>
+
+      <div class="form-group">
+        <label class="form-label mt-3">Mail <span>*</span></label>
+        <input type="text" name="mail" id="mail" class="form-control " required>
+      </div>
+
+      <div class="form-check form-switch mt-2 mb-2">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" title="Tray mail otp feachar" id="switch-check">
+          <small id="Otpid">Use email otp</small>
+          <small id="QandA" class="d-none">Use Q an A</small>
+        </label>
+      </div>
+
+      <div id="option1">
+        <div class="form-group">
+          <label class=" d-flex justify-content-between form-label" for="question">Security Question: <a
+              title="Tray all question and thar ansewers">&#x24d8</a></label>
+          <select class="form-control" name="question" id="question">
+            <option>what is your dream travel destination?</option>
+            <option>what is your grandfather name?</option>
+            <option>What is your village name?</option>
+            <option>what is your first solo trip city?</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="">Ansewer <span>*</span></label>
+          <input type="text" name="ansewer" id="ansewer" class="form-control">
+          <p id="otpmessege1" style="font-size: smaller;color: #ff0000;"></p>
+        </div>
+      </div>
+
+      <div id="option2" class="d-none">
+        <a id="sendotp" class="fs-9" style="cursor: pointer;">send otp</a>
+        <div class="form-group">
+          <label for="">Enter otp</label>
+          <input type="number" class="form-control" name="" id="otp">
+          <p id="otpmessege2" style="font-size: smaller;color: #ff0000;"></p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password <span>*</span></label>
+        <input type="password" class="form-control" name="" id="password" placeholder="">
+        <div class="progressdiv">
+          <div class="progress" id="progressbar"></div>
+        </div>
+        <small id="p"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="">Comfirm Password</label>
+        <input type="password" class="form-control" name="" id="comfirm" placeholder="">
+      </div>
+
+      <button type="submit" class="btn btn-primary form-control mb-3 mt-3"> Submit</button>
+      <div class="text-center mt-3">
+        <p class="small">
+          If you remaber a password:
+          <a href="login">Login</a>
+        </p>
+    </form>
+
+  </div>
+
+  <script>
+
+    let switch_check = document.getElementById("switch-check");
+    let Option1 = document.getElementById("option1");
+    let Option2 = document.getElementById("option2");
+    let otpid = document.getElementById("Otpid");
+    let qnada = document.getElementById("QandA");
+    let p1 = document.getElementById('otpmessege2');
+    let p2 = document.getElementById('otpmessege1');
+
+    
+    
+    // console.log(switch_check.checked);
+    
+    switch_check.addEventListener('change', function () {
+      if (switch_check.checked) {
+        Option1.classList.add('d-none');          // Display otp
+        Option2.classList.remove('d-none');
+        otpid.classList.add('d-none');
+        qnada.classList.remove('d-none');
+        console.log('Otp:', switch_check.checked);
+      } else {
+        Option1.classList.remove('d-none');       // Display ans
+        Option2.classList.add('d-none');
+        qnada.classList.add('d-none');
+        otpid.classList.remove('d-none');
+        console.log('Ans:', switch_check.checked);
+      }
+    });
+
+
+    document.getElementById('sendotp').addEventListener('click', async (event) => {
+      event.preventDefault();
+      let mail = document.getElementById("mail").value;
+      
+      const response1 = await fetch("/api/forgot", {
+        method: 'post',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ mail }),
+      });
+
+      const data = await response1.json()
+      console.log('Response:', data);
+      p2.textContent = data.message;
+      p2.style.color = data.color
+    })
+
+    document.getElementById('forgot-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      let mail = document.getElementById("mail").value;
+      let password = document.getElementById("password").value;
+      let comfirm = document.getElementById("comfirm").value;
+      // console.log(mail, question,otpnum, ansewer, password, comfirm,otpnum );
+      if (switch_check.checked == true) {
+        let otpnum = document.getElementById('otp').value;
+        
+        const response = await fetch("/forgot_otp", {
+          method: 'post',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ mail, password, comfirm, otpnum }),
+        });
+        
+        const data = await response.json()
+        console.log('Response:', data);
+        
+
+        if (!response.ok) {
+          p1.textContent = data.message;
+        } else {
+          p1.textContent = data.message;
+          window.location.href = data.redirectto;
+        }
+      } else {
+
+        let question = document.getElementById("question").value;
+        let ansewer = document.getElementById("ansewer").value;
+
+        const response = await fetch("/forgot_ans", {
+          method: 'post',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ mail, question, ansewer, password, comfirm }),
+        });
+
+        const data = await response.json()
+        // console.log('Response:', data);
+
+
+        if (!response.ok) {
+          p2.textContent = data.message;
+        } else {
+          p2.textContent = data.message;
+          window.location.href = data.redirectto;
+        }
+
+      }
+    })
+
+    let pass = document.getElementById('password');
+    let progressbar = document.getElementById('progressbar')
+    let progressdiv = document.getElementById('progressdiv')
+    let strenghtword = document.getElementById('p')
+    let numm;
+    let length1, number, symbol, upper, lower;
+    function progressfun(num) {
+      let width = (num / 5) * 100;
+      progressbar.style.width = `${width}%`;
+    }
+
+    pass.addEventListener('input', async (e) => {
+
+      let num = 0;
+
+      let passvalue = pass.value
+      // console.log(fist_pass.value)
+      length1 = passvalue.length >= 8;
+      number = /[0-9]/.test(passvalue)
+      symbol = /[\W_]/.test(passvalue)
+      upper = /[A-Z]/.test(passvalue)
+      lower = /[a-z]/.test(passvalue)
+      // console.log('Lenght:', length1, 'number:', number, 'symbol:', symbol, 'upper:', upper, 'lower:', lower);
+      if (upper) { num++; }
+      if (number) { num++; }
+      if (symbol) { num++; }
+      if (lower) { num++; }
+      if (length1) { num++; }
+
+      console.log(num);
+      if (num == 0) {
+        progressfun(num);
+        progressbar.style.background = null;
+        strenghtword.textContent = null;
+        numm = num
+        console.log(numm);
+
+      } else if (num == 1) {
+        progressfun(num);
+        progressbar.style.background = '#ff0000'
+        strenghtword.textContent = 'Weak';
+        strenghtword.style.color = '#ff0000'
+        numm = num
+        console.log(numm);
+
+      } else if (num == 2) {
+        progressfun(num);
+        progressbar.style.background = '#ff7f00'
+        strenghtword.textContent = 'Middle';
+        strenghtword.style.color = '#ff7f00'
+        numm = num
+        console.log(numm);
+
+      } else if (num == 3) {
+        progressfun(num);
+        progressbar.style.background = '#fff000'
+        strenghtword.textContent = 'Middle';
+        strenghtword.style.color = '#fff000'
+        numm = num
+      } else if (num == 4) {
+        progressfun(num);
+        progressbar.style.background = '#7fff00'
+        strenghtword.textContent = 'Strong';
+        strenghtword.style.color = '#7fff00'
+        numm = num
+      } else if (num == 5) {
+        progressfun(num);
+        progressbar.style.background = '#00ff00'
+        strenghtword.textContent = 'Strong';
+        strenghtword.style.color = '#00ff00'
+        numm = num
+      }
+
+    })
+
+  </script>
+</body>
+
+</html>

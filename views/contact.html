@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>Contact</title>
+<style>
+    /* form{
+        color: #00b509;
+    } */
+</style>
+</head>
+
+<body>
+
+    <div class="d-flex justify-content-center align-items-center vh-100 vw-100 text-center">
+        <div class="card border-primary p-5">
+            <form id="contact_form">
+                <h2 class="mb-5">Contact with as</h2>
+
+                <div class="form-group text-start mt-3">
+                    <label for="">User mail</label>
+                    <input type="email" id="user_mail" class="form-control" required>
+                </div>
+
+                <div class="form-group text-start mt-3">
+                    <label for="">User Issue</label>
+                    <input type="text" id="issue" class="form-control" placeholder="In two-three words" required>
+                </div>
+
+                <div class="form-group text-start mt-3">
+                    <label for="">Discreption</label>
+                    <textarea class="form-control" id="Discreption" rows="3"
+                        placeholder="Explain full issue"></textarea>
+                    <small id="massege"></small>
+                </div>
+
+                <p class="mt-2 text-start fs-7" id="massege"></p>
+
+                <button type="submit" class="btn btn-primary mt-3">Send massege</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('contact_form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const mail = document.getElementById('user_mail').value;
+            const issue = document.getElementById('issue').value;
+            const discreption = document.getElementById('Discreption').value;
+            const small = document.getElementById('massege');
+
+            const response = await fetch('/contact', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ mail, issue, discreption })
+            });
+
+            const data = await response.json()
+            console.log(data);
+
+            small.textContent = data.message
+            small.style.color= data.color
+        })
+    </script>
+</body>
+
+</html>
