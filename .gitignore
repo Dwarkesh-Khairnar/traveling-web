@@ -25,3 +25,4 @@ dockerfile
 public/images/
 public/js/gsap.min.js
 routes/
+app.js

@@ -1,13 +1,13 @@
 const express = require('express');
 const session = require('express-session')
-var bodyParser = require('body-parser');
-const path = require('path');
+const bodyParser = require('body-parser');
 const db = require('./db/connection');
 const app = express();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-const PORT = process.env.PORT || 3000;
+require('dotenv').config();
+const PORT = process.env.PORT;
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -120,8 +120,8 @@ const transporter = nodemailer.createTransport(
         // host: 'smtp.gmail.com',
         // post: 465,
         // auth: {
-        //     user: 'd2@gmail.com', // remove with Company mail
-        //     pass: 'byrwejtsuxzfolxd'              // Create in hosting mashine
+        //     user: google_smtp_user,             // remove with Company mail
+        //     pass: google_smtp_pass              // Create in hosting mashine
         // }
 
         // parmanet turbo smtp server data
@@ -129,8 +129,8 @@ const transporter = nodemailer.createTransport(
         post: 25,
         secure: true,
         auth: {
-            user: 'otp_by_travel1@proton.me',
-            pass: 'Vb9toy1o'
+            user: turbo_smtp_user,
+            pass: turbo_smtp_pass
         },
         family: 4
     }
@@ -152,7 +152,6 @@ const transporter = nodemailer.createTransport(
 
 //  Gallery Route
 app.get('/api/gallery', (req, res) => {
-    // console.log('Fetching data from database /gallery');
     const query = 'SELECT * FROM places';
     db.query(query, (err, results) => {
         if (err) {
@@ -160,8 +159,6 @@ app.get('/api/gallery', (req, res) => {
             return res.status(500).json({ error: 'Failed to fetch places' });
         }
         res.json(results); // Send photos posts to the front-end
-        // console.log(results);
-
     });
 });
 
@@ -320,9 +317,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// app.get('/api/dashbord', requireLogin, (req, res) => {
-//     res.json({ username: req.session.username });
-// });
 
 app.post('/contact', async (req, res) => {
     const mail = req.body.mail;
@@ -368,7 +362,6 @@ app.post('/api/forgot', async (req, res) => {
     catch (error) {
         res.status(500).json({ message: 'Otp sending error occurred..!', color: 'red' })
     }
-
     // res.json({ message: 'Mail send Successfully' });
 });
 
@@ -486,7 +479,6 @@ app.post('/forgot_otp', async (req, res) => {
 // Dashbord shection
 
 app.get('/api/users', (req, res) => {
-    // console.log('Fetching data from database /Users');
     const query = 'SELECT * FROM login';
     db.query(query, (err, results) => {
         if (err) {
@@ -585,8 +577,8 @@ app.post('/api/gallery/delete', (req, res) => {
 let usermail;
 
 app.post('/api/user/blogs/dashbord', (req, res) => {
-    let {email}= req.body
-usermail=email;
+    let { email } = req.body
+    usermail = email;
     const query = `SELECT * FROM blog where mail=?`;
     db.query(query, [email], (err, results) => {
         if (err) {
@@ -599,9 +591,8 @@ usermail=email;
 
 // User gallery Route
 app.get('/api/user/gallery', (req, res) => {
-    // console.log('Fetching data from database /gallery');
     const query = `SELECT * FROM places where mail=?`;
-    db.query(query,[usermail], (err, results) => {
+    db.query(query, [usermail], (err, results) => {
         if (err) {
             console.error('Database query error:', err);
             return res.status(500).json({ error: 'Failed to fetch places' });
