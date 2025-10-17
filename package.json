@@ -1,7 +1,7 @@
 {
   "name": "collage-project",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,13 +10,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-<<<<<<< HEAD
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "bootstrap": "^5.3.7",
     "chart": "^0.1.2",
     "chart.js": "^4.5.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
@@ -31,14 +31,9 @@
     "session": "^0.1.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.17"
-=======
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "express": "^4.21.1",
     "mysql2": "^3.11.4"
->>>>>>> c3825673c631771d9ef7e28377b90e23a36082dd
   }
 }

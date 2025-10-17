@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session')
 const bodyParser = require('body-parser');
@@ -6,7 +7,6 @@ const app = express();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-require('dotenv').config();
 const PORT = process.env.PORT;
 
 // Middleware
@@ -122,8 +122,7 @@ const transporter = nodemailer.createTransport(
         // auth: {
         //     user: 'example@gmail.com', // remove with Company mail
         //     pass: 'gmail_app_password'              // Create in hosting mashine
-        //     user: google_smtp_user,             // remove with Company mail
-        //     pass: google_smtp_pass              // Create in hosting mashine
+ 
         // }
 
         // parmanet turbo smtp server data
@@ -133,8 +132,7 @@ const transporter = nodemailer.createTransport(
         auth: {
             user: 'abc@example.com',
             pass: 'smtp-server_password'
-            user: turbo_smtp_user,
-            pass: turbo_smtp_pass
+
         },
         family: 4
     }
