@@ -120,18 +120,18 @@ const transporter = nodemailer.createTransport(
         // host: 'smtp.gmail.com',
         // post: 465,
         // auth: {
-        //     user: 'example@gmail.com', // remove with Company mail
-        //     pass: 'gmail_app_password'              // Create in hosting mashine
+        //     user: 'process.env.google_smtp_user', // remove with Company mail
+        //     pass: 'process.env.google_smtp_pass'              // Create in hosting mashine
  
         // }
 
         // parmanet turbo smtp server data
-        host: 'pro.turbo.com',
+        host: process.env.fix_smtp_host,
         post: 25,
         secure: true,
         auth: {
-            user: 'abc@example.com',
-            pass: 'smtp-server_password'
+            user: 'process.env.fix_smtp_user',
+            pass: 'process.env.fix_smtp_pass'
 
         },
         family: 4
