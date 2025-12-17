@@ -1,7 +1,0 @@
-**bash**
-
-npm i
-
-**browser**
-
-http://localchost:3600
