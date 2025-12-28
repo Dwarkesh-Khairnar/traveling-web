@@ -1,4 +1,4 @@
-// Need to modify this file for router 
+// Need to modify this file for router like blogs, gallery ext
 
 // const express = require('express');
 // const router = express.Router();
@@ -37,6 +37,7 @@
 // });
 
 // module.exports = router;
+
 
 
 
