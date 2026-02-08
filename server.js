@@ -1,21 +1,32 @@
-require('dotenv').config();
-const express = require('express');
-const session = require('express-session')
-const bodyParser = require('body-parser');
-const db = require('./db/connection');
+import dotenv from "dotenv";
+dotenv.config();
+import express from 'express';
+import session from 'express-session';
+import bodyParser from 'body-parser';
+import db from './db/connection.js';
+import cors from 'cors';
+import bcrypt from 'bcrypt';
+import nodemailer from 'nodemailer';
+
 const app = express();
-const cors = require('cors');
-const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
 const PORT = process.env.PORT;
+// Route Files
+import blogsRoute from './routes/Blogs.js'
 
 // Middleware
+import requireLogin from "./middleware/session_auth.js";
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/public', express.static('Public'));
 app.use('/node_modules', express.static('node_modules'));
 app.set('view engine', 'html');
 app.use(cors());
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // session verification
 app.use(session({
@@ -26,16 +37,16 @@ app.use(session({
 })
 );
 
-//   middleware to check if user is logged in 
-const requireLogin = (req, res, next) => {
-    if (req.session.logIn) {
-        next();
-    } else {
-        // res.data-bs-target("#modelId")
-        res.redirect('/login')
-        // return res.status(400).json({message:'Login need for use this feacher'})
-    }
-}
+// //   middleware to check if user is logged in 
+// const requireLogin = (req, res, next) => {
+//     if (req.session.logIn) {
+//         next();
+//     } else {
+//         // res.data-bs-target("#modelId")
+//         res.redirect('/login')
+//         // return res.status(400).json({message:'Login need for use this feacher'})
+//     }
+// }
 
 // Home Page Route
 app.get('/', (req, res) => {
@@ -120,9 +131,9 @@ const transporter = nodemailer.createTransport(
         // host: 'smtp.gmail.com',
         // post: 465,
         // auth: {
-        //     user: 'process.env.google_smtp_user', // remove with Company mail
+        //     user: 'process.env.google_smtp_user',             // remove with Company mail
         //     pass: 'process.env.google_smtp_pass'              // Create in hosting mashine
- 
+
         // }
 
         // parmanet turbo smtp server data
@@ -183,22 +194,24 @@ app.get('/api/find', (req, res) => {
     res.json({ lat: lat, lng: lng, cityname: cityname })
 })
 
+app.use('/api', blogsRoute);
+
 // Add Blog Post
-app.post('/blog', requireLogin, (req, res) => {
-    const title = req.body.title?.trim();
-    const content = req.body.content?.trim();
-    const username = req.body.disable_mail?.trim();
-    console.log('usename', username);
+// app.post('/blog', requireLogin, (req, res) => {
+//     const title = req.body.title?.trim();
+//     const content = req.body.content?.trim();
+//     const username = req.body.disable_mail?.trim();
+//     console.log('usename', username);
 
-    if (!title || !content) {
-        return res.status(400).send('All fields are required');
-    }
+//     if (!title || !content) {
+//         return res.status(400).send('All fields are required');
+//     }
 
-    db.query('INSERT INTO blog (title, content,mail) VALUES (?, ?, ?)', [title, content, username], (err) => {
-        if (err) throw err;
-    });
-    res.redirect('/blog');
-});
+//     db.query('INSERT INTO blog (title, content,mail) VALUES (?, ?, ?)', [title, content, username], (err) => {
+//         if (err) throw err;
+//     });
+//     res.redirect('/blog');
+// });
 
 // blogs finders code
 app.post('/find-blogs', (req, res) => {
@@ -221,16 +234,16 @@ app.post('/find-blogs', (req, res) => {
 
 
 // finel code of blog fetching
-app.get('/api/blog', (req, res) => {
-    const query = `SELECT * FROM blog where topreting='top'`;
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Database query error:', err);
-            return res.status(500).json({ error: 'Failed to fetch blog posts' });
-        }
-        res.json(results); // Send blog posts to the front-end
-    });
-});
+// app.get('/api/blog', (req, res) => {
+//     const query = `SELECT * FROM blog where topreting='top'`;
+//     db.query(query, (err, results) => {
+//         if (err) {
+//             console.error('Database query error:', err);
+//             return res.status(500).json({ error: 'Failed to fetch blog posts' });
+//         }
+//         res.json(results); // Send blog posts to the front-end
+//     });
+// });
 
 
 app.post('/sing', async (req, res) => {
@@ -493,34 +506,34 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-app.get('/api/blogs/dashbord', (req, res) => {
-    const query = `SELECT * FROM blog `;
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Database query error:', err);
-            return res.status(500).json({ error: 'Failed to fetch blog posts' });
-        }
-        res.json(results); // Send blog posts to the front-end
-    });
-});
+// app.get('/api/blogs/dashbord', (req, res) => {
+//     const query = `SELECT * FROM blog `;
+//     db.query(query, (err, results) => {
+//         if (err) {
+//             console.error('Database query error:', err);
+//             return res.status(500).json({ error: 'Failed to fetch blog posts' });
+//         }
+//         res.json(results); // Send blog posts to the front-end
+//     });
+// });
 
-app.post('/api/blogs/add', (req, res) => {
-    const title = req.body.title;
-    const content = req.body.content;
-    db.query('INSERT INTO blog (title, content) VALUES (?, ?)', [title, content], (err) => {
-        if (err) throw err;
-        res.redirect('/bord');
-    });
-});
+// app.post('/api/blogs/add', (req, res) => {
+//     const title = req.body.title;
+//     const content = req.body.content;
+//     db.query('INSERT INTO blog (title, content) VALUES (?, ?)', [title, content], (err) => {
+//         if (err) throw err;
+//         res.redirect('/bord');
+//     });
+// });
 
-app.post('/api/blogs/delete', (req, res) => {
-    const { id } = req.body;
+// app.post('/api/blogs/delete', (req, res) => {
+//     const { id } = req.body;
 
-    db.query('DELETE from blog where idblog=?', [id], err => {
-        if (err) throw err;
-        res.redirect('/bord')
-    });
-});
+//     db.query('DELETE from blog where idblog=?', [id], err => {
+//         if (err) throw err;
+//         res.redirect('/bord')
+//     });
+// });
 
 // Chart
 
@@ -575,21 +588,21 @@ app.post('/api/gallery/delete', (req, res) => {
 
 
 
-// User dashbord section
-let usermail;
+// // User dashbord section
+// let usermail;
 
-app.post('/api/user/blogs/dashbord', (req, res) => {
-    let { email } = req.body
-    usermail = email;
-    const query = `SELECT * FROM blog where mail=?`;
-    db.query(query, [email], (err, results) => {
-        if (err) {
-            console.error('Database query error:', err);
-            return res.status(500).json({ error: 'Failed to fetch blog posts' });
-        }
-        res.json(results); // Send blog posts to the front-end
-    });
-});
+// app.post('/api/user/blogs/dashbord', (req, res) => {
+//     let { email } = req.body
+//     usermail = email;
+//     const query = `SELECT * FROM blog where mail=?`;
+//     db.query(query, [email], (err, results) => {
+//         if (err) {
+//             console.error('Database query error:', err);
+//             return res.status(500).json({ error: 'Failed to fetch blog posts' });
+//         }
+//         res.json(results); // Send blog posts to the front-end
+//     });
+// });
 
 // User gallery Route
 app.get('/api/user/gallery', (req, res) => {

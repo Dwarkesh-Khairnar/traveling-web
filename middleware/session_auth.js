@@ -1,10 +1,10 @@
-//   middleware to check if user is logged in 
+// middleware/session_auth.js
 const requireLogin = (req, res, next) => {
-    if (req.session.logIn) {
-        next();
-    } else {
-        // res.data-bs-target("#modelId")
-        res.redirect('/login')
-        // return res.status(400).json({message:'Login need for use this feacher'})
-    }
-}
+  if (req.session?.logIn) {
+    return next();                 // user is logged in → continue
+  }
+  // not logged in → redirect to login page
+  return res.redirect('/login');
+};
+
+export default requireLogin;
