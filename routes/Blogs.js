@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 // Add Blog Post
-router.post('/blog',requireLogin, (req, res) => {
+router.post('/blog', requireLogin, (req, res) => {
     const title = req.body.title?.trim();
     const content = req.body.content?.trim();
     const username = req.body.disable_mail?.trim();
@@ -23,7 +23,7 @@ router.post('/blog',requireLogin, (req, res) => {
     res.redirect('/blog');
 });
 
-// finel code of blog fetching
+// Ranking code for blogs
 router.get('/blog', (req, res) => {
     const query = `SELECT * FROM blog where topreting='top'`;
     db.query(query, (err, results) => {
@@ -35,6 +35,8 @@ router.get('/blog', (req, res) => {
     });
 });
 
+
+//  Admin section
 router.get('/blogs/dashbord', (req, res) => {
     const query = `SELECT * FROM blog `;
     db.query(query, (err, results) => {
@@ -70,5 +72,15 @@ router.post('/user/blogs/dashbord', (req, res) => {
         res.json(results); // Send blog posts to the front-end
     });
 });
+
+router.post('/user/blogs/delete', (req, res) => {
+    const { id } = req.body;
+
+    db.query('DELETE from blog where idblog=?', [id], err => {
+        if (err) throw err;
+        res.redirect('/bord')
+    });
+});
+
 
 export default router;

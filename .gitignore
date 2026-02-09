@@ -24,7 +24,7 @@ dockerfile
 
 public/images/
 public/js/gsap.min.js
-routes/
+
 tempServer.js
 app.js
 MEGA-RECOVERYKEY (1).txt
