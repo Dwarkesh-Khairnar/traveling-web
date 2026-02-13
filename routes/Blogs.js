@@ -82,5 +82,22 @@ router.post('/user/blogs/delete', (req, res) => {
     });
 });
 
+// blogs finders code
+router.post('/find-blogs', (req, res) => {
+    const word = req.body.city;
+
+    const query = `SELECT * FROM blog where title like '%${word}%'`;
+    db.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to fetch blog posts' + err });
+        }
+        if (results.length > 0) {
+            res.json(results); // Send blog posts to the front-end 
+
+        } else {
+            res.status(404).json({ message: `"${word}" word releted blog are not found` })
+        }
+    });
+});
 
 export default router;
