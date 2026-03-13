@@ -10,4 +10,6 @@ the basic name but full with functions and usefull fetchers
    ### Backend
    - Node.js
    - Express.js
- 
+
+   ### storage
+   - Mysql
