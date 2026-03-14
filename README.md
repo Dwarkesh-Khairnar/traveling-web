@@ -11,5 +11,11 @@ the basic name but full with functions and usefull fetchers
    - Node.js
    - Express.js
 
-   ### storage
-   - Mysql
+  ### Security
+   - sessions
+
+  ### Storege 
+   - Mega
+
+### Database
+  - Mysql - Free plan of Ai**n
