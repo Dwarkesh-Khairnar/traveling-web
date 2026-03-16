@@ -33,11 +33,23 @@ Database - MySQL (Free Plan)
   -------------------
   PROJECT STRUCTURE
   -------------------
+ 
+    travelling-web-portal
+    │
+    ├── public/                     # Static files (CSS, JS, Images)
+    │
+    ├── views/                      # Frontend templates
+    │
+    ├── routes/                     # Application routes
+    │
+    ├── controllers/                # Business logic
+    │
+    ├── config/                     # Database and session configuration
+    │
+    ├── app.js                      # Main server file
+    │
+    └── package.json                # Project dependencies and scripts
 
-travelling-web-portal │ ├── public/ Static files (CSS, JS, Images) ├──
-views/ Frontend templates ├── routes/ Application routes ├──
-controllers/ Business logic ├── config/ Database and session
-configuration ├── app.js Main server file └── package.json
 
 <!--  -----------------
   GETTING STARTED
