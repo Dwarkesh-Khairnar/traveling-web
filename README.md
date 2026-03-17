@@ -4,7 +4,11 @@ A Traveling Web Portal built to provide users with a simple and
 interactive platform to explore travel-related features. This project
 demonstrates a full‑stack web application using Node.js, Express, and
 MySQL.
-
+---
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3) ![Node.js](https://img.shields.io/badge/Node.js-20-339933) ![Express](https://img.shields.io/badge/Express-4.19-000000)
+![Auth](https://img.shields.io/badge/Auth-Session‑blue)
+![MEGA](https://img.shields.io/badge/MEGA-Storage-00B3A4)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1)
   ------------
   TECH STACK
   ------------
