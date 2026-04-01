@@ -85,6 +85,12 @@ Server will start at: http://localhost:3000 -->
 -   Improve UI/UX
 -   Add admin dashboard
 
+  ----------------------------
+  Tech stack update
+  ----------------------------
+  - React
+  - tailwwind
+    
   --------
   AUTHOR
   --------
