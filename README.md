@@ -88,7 +88,7 @@ Server will start at: http://localhost:3000 -->
   ----------------------------
   Tech stack update
   ----------------------------
-  - React
+  - React.js
   - tailwwind
     
   --------
