@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,7 +44,6 @@
     <div class="input-group mb-3">
       <input type="search" list="suggestions" class="form-control" id="search" placeholder="Search location..." />
       <datalist id="suggestions"></datalist>
-      <!-- <button class="btn btn-primary" id="fetchPlaces">Fetch Places</button> -->
     </div>
 
     <!-- Category Switches -->
@@ -68,7 +66,6 @@
     <div id="places"></div>
   </div>
 
-
   <!-- Toast Container -->
   <div class="toast-container position-fixed bottom-0 start-0 p-3">
     <div id="welcomeToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -77,30 +74,17 @@
         <small>Now</small>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
-      <div class="toast-body" id="toastMessage">
-      </div>
-    </div>
-  </div>
-
-  <div class="toast align-items-center text-white bg-dengar border-0" role="alert" aria-live="assertive"
-    aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body">
-
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-        aria-label="Close"></button>
+      <div class="toast-body" id="toastMessage"></div>
     </div>
   </div>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Helper function to show toast
     function showWelcomeToast(message, hedingsmg, color) {
       const toastMessageEl = document.getElementById("toastMessage");
-      toastElement = document.getElementById("welcomeToast");
-      let heding = document.getElementById('heding')
+      const toastElement = document.getElementById("welcomeToast");
+      const heding = document.getElementById('heding');
 
       if (toastMessageEl && toastElement) {
         toastMessageEl.textContent = message;
@@ -109,15 +93,11 @@
         toastElement.classList.add(color);
         const toast = new bootstrap.Toast(toastElement);
         toast.show();
-      } else {
-        console.warn("Toast elements not found in DOM.");
       }
     }
 
-    let toastElement;
-    let lat1, lng1,city;
+    let lat1, lng1, city;
     let selectedMarker;
-    let search2;
 
     const apiKey = "3dfc97b4a1ce4b43bbead926d3e6933b";
     let mymap = L.map("map").setView([20.5937, 78.9629], 5);
@@ -125,23 +105,20 @@
       maxZoom: 19,
     }).addTo(mymap);
 
-      document.addEventListener("DOMContentLoaded", () => {
-        if (window.location.pathname === "/find") {
-          fetch("/api/find")
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data);
-              lat1 = data.lat
-              lng1 = data.lng
-              city=data.cityname;
-              console.log(lat1, lng1,city);
-              mymap.setView([lat1, lng1], 11);
-              setMarker(lat1, lng1,city)
-            })
-        }
-      });
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.location.pathname === "/find") {
+        fetch("/api/find")
+          .then((response) => response.json())
+          .then((data) => {
+            lat1 = data.lat;
+            lng1 = data.lng;
+            city = data.cityname;
+            mymap.setView([lat1, lng1], 11);
+            setMarker(lat1, lng1, city);
+          });
+      }
+    });
 
-    // Category definitions
     const categoryGroups = {
       "Shopping & Retail": ["commercial.supermarket", "commercial.marketplace", "commercial.shopping_mall", "commercial.department_store", "commercial.elektronics", "commercial.outdoor_and_sport", "commercial.vehicle", "commercial.hobby", "commercial.books", "commercial.gift_and_souvenir", "commercial.stationery", "commercial.newsagent", "commercial.tickets_and_lottery", "commercial.clothing", "commercial.bag", "commercial.baby_goods", "commercial.garden", "commercial.florist", "commercial.chemist", "commercial.gas"],
       "Dining & Food": ["catering.restaurant", "catering.fast_food", "catering.cafe", "catering.food_court", "catering.bar", "catering.pub", "catering.ice_cream", "catering.biergarten", "catering.taproom"],
@@ -154,12 +131,11 @@
       "Rental Vehicles": ["rental", "rental.car", "rental.bicycle", "rental.boat", "rental.ski"],
       "Rail Transportation": ["railway", "railway.train", "railway.subway", "railway.surface", "railway.underground"],
       "Public Transport": ["public_transport", "public_transport.bus", "public_transport.ferry", "public_transport.train", "public_transport.subway", "public_transport.aerialway"],
-      "Sports & Fitness": ["sport", "sport.stadium", "sport.stadium", "sport.ice_rink", "sport.dive_centre", "sport.pitch", "sport.swimming_pool", "sport.track"]
+      "Sports & Fitness": ["sport", "sport.stadium", "sport.ice_rink", "sport.dive_centre", "sport.pitch", "sport.swimming_pool", "sport.track"]
     };
 
     const categoriesForm = document.getElementById("categoriesForm");
     const categorySwitches = document.getElementById("categorySwitches");
-
     const allSelectedCategories = new Set();
 
     function renderSwitches() {
@@ -174,8 +150,6 @@
         categorySwitches.appendChild(col);
 
         document.getElementById(`switch${index}`).addEventListener("change", (e) => {
-          console.log(e);
-
           updateCategoryCheckboxes(label, e.target.checked);
         });
       });
@@ -197,17 +171,16 @@
       categoriesForm.innerHTML = "";
       Array.from(allSelectedCategories).forEach(cat => {
         const checkbox = document.createElement("label");
-        checkbox.className = 'col-md-3'
+        checkbox.className = 'col-md-3';
         checkbox.innerHTML = `
           <input type="checkbox" value="${cat}">${cat.split(".").pop().replace(/_/g, " ").toUpperCase()}
-          `;
+        `;
         categoriesForm.appendChild(checkbox);
       });
     }
 
     renderSwitches();
 
-    // Search handling
     const inputSearch = document.getElementById("search");
     const datalist = document.getElementById("suggestions");
     let searchTimeout, searchResults;
@@ -216,14 +189,11 @@
       clearTimeout(searchTimeout);
 
       searchTimeout = setTimeout(() => {
-        const searchText = e.target.value;    
-        console.log('file value: ',searchText);
-            
+        const searchText = e.target.value;
+
         fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&lang=en&limit=7&format=json&apiKey=${apiKey}`)
           .then(res => res.json())
           .then(data => {
-            console.log('City Data:',data);
-            
             searchResults = data.results;
             datalist.innerHTML = "";
             data.results.forEach(r => {
@@ -235,42 +205,29 @@
       }, 600);
     });
 
-    let val
     inputSearch.addEventListener("change", (r) => {
-      val = inputSearch.value;
+      const val = inputSearch.value;
       const match = searchResults.find(r => r.formatted === val);
 
       if (match) {
         lat1 = match.lat;
         lng1 = match.lon;
         mymap.setView([lat1, lng1], 13);
-        setMarker(lat1, lng1,val);
+        setMarker(lat1, lng1, val);
       }
     });
 
-    // Map.click
-    // mymap.on("click", (e) => {
-    //   console.log(e);
-
-    //   lat1 = e.latlng.lat;
-    //   lng1 = e.latlng.lng;
-    //   setMarker(lat1, lng1);
-    // });
-
-    function setMarker(lat, lng ,city) {
+    function setMarker(lat, lng, city) {
       if (selectedMarker) mymap.removeLayer(selectedMarker);
       selectedMarker = L.marker([lat, lng]).addTo(mymap);
       selectedMarker.bindPopup(city).openPopup();
-
     }
 
-    // Fetch places
     document.getElementById("fetchPlaces").addEventListener("click", () => {
       const selected = Array.from(document.querySelectorAll("#categoriesForm input:checked")).map(i => i.value);
-      // if (!lat1 || !lng1) return alert("Please select a location on map or search.");
 
       if (selected.length === 0) {
-        showWelcomeToast('Select at least one category', 'Alert', 'bg-warning')
+        showWelcomeToast('Select at least one category', 'Alert', 'bg-warning');
         return;
       }
 
@@ -283,14 +240,13 @@
           const placesDiv = document.getElementById("places");
           placesDiv.innerHTML = "";
 
-          // Remove old markers
           mymap.eachLayer(layer => {
             if (layer instanceof L.Marker && layer !== selectedMarker) mymap.removeLayer(layer);
           });
 
           if (data.features.length === 0) {
             placesDiv.innerHTML = "<p>No places found.</p>";
-            showWelcomeToast('Places not found ont this city/tawn', 'Error', 'bg-danger')
+            showWelcomeToast('Places not found in this city/town', 'Error', 'bg-danger');
             return;
           }
 
@@ -317,98 +273,10 @@
         .catch(err => {
           console.error(err);
           document.getElementById("places").innerHTML = "<p>Error fetching places.</p>";
-          showWelcomeToast('Check internet connection or Error fetching places', 'Error', 'bg-danger')
+          showWelcomeToast('Check internet connection or Error fetching places', 'Error', 'bg-danger');
         });
     });
   </script>
 </body>
 
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>two</title>
-</head>
-
-<body>
-    <p id="p"></p>
-</body>
-<script>
-    let p = document.getElementById('p')
-
-    document.addEventListener("DOMContentLoaded", () => {
-        if (window.location.pathname === "/two") {
-            fetch("/api/two")
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data);
-                    p.textContent = data.lat+','+data.lon;
-                })
-        }
-    });
-
-</script>
-
-</html> -->
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/node_modules/bootstrap/dist/css/bootstrap.css.map" rel="stylesheet">
-    <title>Places finder by map</title>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Travel Website</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/gallery">Gallery</a></li>
-                <li class="nav-item"><a class="nav-link" href="/distance">Distance Calculator</a></li>
-                <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <script>
-        const categories=[
-            "commercial.supermarket",
-            "commercial.clothing",
-            "commercial.food_and_drink",
-            "accommodation.hotel",
-            "entertainment.museum",
-            "enteetainment.water_park",
-            "rental.bicycle"
-        ];
-
-        const categoriesform=document.getElementById('catagoiesform');
-        categories.forEach(category=>{
-            const lable =document.createElement("lable");
-            lable.innerHTML=`<input class="form-control" type="Checkbox" value="${category}">`
-            $(category.split('_').pop().replace('_',' ').toUpperCase());
-            categoriesform.appendChild(lable);
-            categoriesform.appendChild(document.createElement('br'));
-        });
-
-        const apikey="You_Api_Key";
-    </script>
-
-    <h1>Finde Places </h1>
-    <p>Select categories and click on the map to set the city on you whant to traval with as</p>
-    <form id="categoriesform">
-        <!-- Check box diynamically add on here -->
-    </form>
-    <button id="fetchPlaces"> Get info</button>
-    
-    <div id="map"></div>
-    <div id="Places"></div>
-</body>
-</html>
->>>>>>> c3825673c631771d9ef7e28377b90e23a36082dd
