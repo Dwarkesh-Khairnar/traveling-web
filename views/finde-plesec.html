@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Find Places by Clicking on the Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
     body {
       margin: 10px;
@@ -80,6 +80,7 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     function showWelcomeToast(message, hedingsmg, color) {
       const toastMessageEl = document.getElementById("toastMessage");
@@ -96,28 +97,15 @@
       }
     }
 
-    let lat1, lng1, city;
+    let lat1 = 20.5937, lng1 = 78.9629, city = "India"; // Default values
     let selectedMarker;
+    let searchResults = [];
 
     const apiKey = "3dfc97b4a1ce4b43bbead926d3e6933b";
-    let mymap = L.map("map").setView([20.5937, 78.9629], 5);
+    let mymap = L.map("map").setView([lat1, lng1], 5);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
     }).addTo(mymap);
-
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.location.pathname === "/find") {
-        fetch("/api/find")
-          .then((response) => response.json())
-          .then((data) => {
-            lat1 = data.lat;
-            lng1 = data.lng;
-            city = data.cityname;
-            mymap.setView([lat1, lng1], 11);
-            setMarker(lat1, lng1, city);
-          });
-      }
-    });
 
     const categoryGroups = {
       "Shopping & Retail": ["commercial.supermarket", "commercial.marketplace", "commercial.shopping_mall", "commercial.department_store", "commercial.elektronics", "commercial.outdoor_and_sport", "commercial.vehicle", "commercial.hobby", "commercial.books", "commercial.gift_and_souvenir", "commercial.stationery", "commercial.newsagent", "commercial.tickets_and_lottery", "commercial.clothing", "commercial.bag", "commercial.baby_goods", "commercial.garden", "commercial.florist", "commercial.chemist", "commercial.gas"],
@@ -170,12 +158,17 @@
     function renderCategoryCheckboxes() {
       categoriesForm.innerHTML = "";
       Array.from(allSelectedCategories).forEach(cat => {
-        const checkbox = document.createElement("label");
-        checkbox.className = 'col-md-3';
-        checkbox.innerHTML = `
-          <input type="checkbox" value="${cat}">${cat.split(".").pop().replace(/_/g, " ").toUpperCase()}
+        const div = document.createElement("div");
+        div.className = 'col-md-3';
+        div.innerHTML = `
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="cat-${cat}" value="${cat}">
+            <label class="form-check-label" for="cat-${cat}">
+              ${cat.split(".").pop().replace(/_/g, " ").toUpperCase()}
+            </label>
+          </div>
         `;
-        categoriesForm.appendChild(checkbox);
+        categoriesForm.appendChild(div);
       });
     }
 
@@ -183,37 +176,48 @@
 
     const inputSearch = document.getElementById("search");
     const datalist = document.getElementById("suggestions");
-    let searchTimeout, searchResults;
+    let searchTimeout;
 
     inputSearch.addEventListener("input", (e) => {
       clearTimeout(searchTimeout);
 
-      searchTimeout = setTimeout(() => {
-        const searchText = e.target.value;
+      const searchText = e.target.value.trim();
+      if (searchText.length < 2) {
+        datalist.innerHTML = "";
+        searchResults = [];
+        return;
+      }
 
-        fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&lang=en&limit=7&format=json&apiKey=${apiKey}`)
+      searchTimeout = setTimeout(() => {
+        fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(searchText)}&lang=en&limit=7&format=json&apiKey=${apiKey}`)
           .then(res => res.json())
           .then(data => {
-            searchResults = data.results;
+            searchResults = data.results || [];
             datalist.innerHTML = "";
-            data.results.forEach(r => {
+            searchResults.forEach(r => {
               const opt = document.createElement("option");
               opt.value = r.formatted;
               datalist.appendChild(opt);
             });
+          })
+          .catch(() => {
+            searchResults = [];
+            datalist.innerHTML = "";
           });
       }, 600);
     });
 
-    inputSearch.addEventListener("change", (r) => {
+    inputSearch.addEventListener("change", (e) => {
       const val = inputSearch.value;
       const match = searchResults.find(r => r.formatted === val);
 
       if (match) {
         lat1 = match.lat;
         lng1 = match.lon;
+        city = match.formatted;
         mymap.setView([lat1, lng1], 13);
-        setMarker(lat1, lng1, val);
+        setMarker(lat1, lng1, city);
+        showWelcomeToast(`Selected location: ${city}`, 'Location', 'bg-success');
       }
     });
 
@@ -225,6 +229,11 @@
 
     document.getElementById("fetchPlaces").addEventListener("click", () => {
       const selected = Array.from(document.querySelectorAll("#categoriesForm input:checked")).map(i => i.value);
+
+      if (!lat1 || !lng1) {
+        showWelcomeToast('Please select a location first', 'Error', 'bg-danger');
+        return;
+      }
 
       if (selected.length === 0) {
         showWelcomeToast('Select at least one category', 'Alert', 'bg-warning');
@@ -244,9 +253,9 @@
             if (layer instanceof L.Marker && layer !== selectedMarker) mymap.removeLayer(layer);
           });
 
-          if (data.features.length === 0) {
-            placesDiv.innerHTML = "<p>No places found.</p>";
-            showWelcomeToast('Places not found in this city/town', 'Error', 'bg-danger');
+          if (!data.features || data.features.length === 0) {
+            placesDiv.innerHTML = "<p>No places found in this area.</p>";
+            showWelcomeToast('No places found in this city/town', 'Error', 'bg-danger');
             return;
           }
 
