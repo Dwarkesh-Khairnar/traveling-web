@@ -84,6 +84,7 @@ Server will start at: http://localhost:3000 -->
 -   Add travel booking system
 -   Improve UI/UX
 -   Add admin dashboard
+-   Ret limiting 
 
   ----------------------------
   Tech stack update
